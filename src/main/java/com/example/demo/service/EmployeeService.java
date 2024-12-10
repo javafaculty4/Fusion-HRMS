@@ -26,5 +26,7 @@ public interface EmployeeService {
 	public void deleteByName(String firstName, String lastName) ;
 	
 	public List<Employee> getAll();
+	
+	public long getCount();
 
 }

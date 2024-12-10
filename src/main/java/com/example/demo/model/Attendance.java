@@ -30,6 +30,10 @@ public class Attendance {
 	private Shift shift;
 
 	private LocalDate date;
+	
+	private String month;
+	
+	private int year;
 
 	private LocalTime loginTime;
 
@@ -42,10 +46,40 @@ public class Attendance {
 	private int halfDay;
 
 	private int emp_leave;
+	
+	private LocalTime lateTime;
 
 	public Attendance() {
 
 	}
+	
+	public LocalTime getLateTime() {
+		return lateTime;
+	}
+
+	public void setLateTime(LocalTime lateTime) {
+		this.lateTime = lateTime;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+
+	public int getYear() {
+		return year;
+	}
+
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
 
 	public int getId() {
 		return id;

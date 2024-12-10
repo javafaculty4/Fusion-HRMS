@@ -66,6 +66,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public List<Employee> getAll(){
 		return employeeRepository.findAll();
 	}
+	
+	public long getCount() {
+		return employeeRepository.count();
+	}
 
 }
 

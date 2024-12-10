@@ -20,5 +20,17 @@ public interface AttendanceService {
 	public String delete(int id);
 	
 	public List<Attendance> getByDate(LocalDate date);
+	
+	public List<Attendance> findByMonth(String month);
+	
+	public List<Attendance> findByYear(int year);
+	
+	public List<Attendance> findByEmpIdAndMonth(String empId,String month);
+	
+	public long countOnLeaveByDate(LocalDate date);
+	
+	public long countByDate(LocalDate date);
+	
+	public long presentCountByDate(LocalDate date);
 
 }
