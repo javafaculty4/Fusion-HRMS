@@ -1,12 +1,16 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.exception.DuplicateEmployeeIdException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Employee;
+import com.example.demo.model.Role;
 import com.example.demo.repository.EmployeeRepository;
 
 @Service
@@ -15,9 +19,16 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	
-	public Employee save(Employee emp) {
-		return employeeRepository.save(emp);
-	}
+	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
+	
+	/*
+	 * public Employee save(Employee emp) { return employeeRepository.save(emp); }
+	 */
 	
 	public Employee getById(String id) {
 		return employeeRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Employee","employee_id", ""+id));
@@ -69,6 +80,23 @@ public class EmployeeServiceImpl implements EmployeeService{
 	
 	public long getCount() {
 		return employeeRepository.count();
+	}
+
+	@Override
+	public Employee findEmployeeByUsername(String username) {
+		return employeeRepository.findByUsername(username);
+	}
+
+	@Override
+	public Employee signUp(Employee emp, int role_id) {
+		Optional<Employee> employee = employeeRepository.findById(emp.getEmpId());
+		if(employee.isPresent()) {
+			throw new DuplicateEmployeeIdException("Duplicate Employee ID : "+emp.getEmpId());
+		}
+		Optional<Role> role = roleService.getRoleById(role_id);
+		emp.setRole(role.get());
+		emp.setPassword(passwordEncoder.encode(emp.getPassword()));
+		return employeeRepository.save(emp);
 	}
 
 }

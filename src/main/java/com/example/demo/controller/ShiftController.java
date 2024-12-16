@@ -4,6 +4,8 @@ import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,11 +19,13 @@ import com.example.demo.service.ShiftService;
 
 @RestController
 @RequestMapping("/api/v1/shift")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ShiftController {
 	
 	@Autowired
 	private ShiftService service;
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_HR')")
 	@PostMapping
 	public Shift save(@RequestBody Shift shift) {
 		return service.save(shift);
@@ -42,6 +46,7 @@ public class ShiftController {
 		return service.getByLoginTime(localTime);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_HR')")
 	@DeleteMapping("/{id}")
 	public String deleteById(@PathVariable int id) {
 		return service.deleteById(id);

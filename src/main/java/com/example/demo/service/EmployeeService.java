@@ -7,9 +7,14 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.Employee;
 
 
-public interface EmployeeService {
 
-	public Employee save(Employee emp) ;
+public interface EmployeeService {
+	
+	//Sign in
+	public Employee findEmployeeByUsername(String username);
+
+	//Sign up
+	public Employee signUp(Employee emp,int role_id) ;
 	
 	public Employee getById(String id) ;
 	

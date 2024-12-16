@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.example.demo.model.Employee;
 
+
 import jakarta.transaction.Transactional;
 
 public interface EmployeeRepository extends JpaRepository<Employee, String>{
@@ -24,4 +25,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, String>{
 	@Modifying
 	@Query("delete from Employee emp where emp.firstName=:firstName and emp.lastName=:lastName")
 	public void deleteByName(String firstName,String lastName);
+	
+	public Employee findByUsername(String username);
 }

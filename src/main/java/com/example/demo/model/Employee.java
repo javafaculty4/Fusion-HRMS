@@ -12,8 +12,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
 public class Employee {
@@ -24,13 +26,13 @@ public class Employee {
 	
 	private String firstName;
 	private String lastName;
-	private long phone;
+	private long phoneNumber;
 	private String email;
 	private String address;
 	private LocalDate dob;
-	private String jobTitle;
+	private String designation;
 	private String department;
-	private LocalDate hireDate;
+	private LocalDate joiningDate;
 	private String gender;
 	private double salary;
 	private String branch;
@@ -42,6 +44,16 @@ public class Employee {
 	private String pfNumber;
 	private String emp_status;
 	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="user_role",referencedColumnName = "id")
+	private Role role;
+		
+	@Column(name="password")
+	private String password;
+	
+	@Column(name="username",unique = true)
+	private String username;
+	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "bank_id",referencedColumnName = "id")
 	private Bank bank;
@@ -49,25 +61,27 @@ public class Employee {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
 	private List<Attendance> attendanceList;
 	
+	
 	public Employee() {
 		
 	}
 
-	public Employee(String empId, String firstName, String lastName, long phone, String email, String address,
-			LocalDate dob, String jobTitle, String department, LocalDate hireDate, String gender, double salary,
+	public Employee(String empId, String firstName, String lastName, long phoneNumber, String email, String address,
+			LocalDate dob, String designation, String department, LocalDate joiningDate, String gender, double salary,
 			String branch, String qualification, String bloodGroup, String maritalStatus, String panNo, long aadhar,
-			String pfNumber, Bank bank, String emp_status) {
+			String pfNumber, String emp_status, Role role, String password, String username, Bank bank,
+			List<Attendance> attendanceList) {
 		super();
 		this.empId = empId;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.phone = phone;
+		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.address = address;
 		this.dob = dob;
-		this.jobTitle = jobTitle;
+		this.designation = designation;
 		this.department = department;
-		this.hireDate = hireDate;
+		this.joiningDate = joiningDate;
 		this.gender = gender;
 		this.salary = salary;
 		this.branch = branch;
@@ -77,19 +91,13 @@ public class Employee {
 		this.panNo = panNo;
 		this.aadhar = aadhar;
 		this.pfNumber = pfNumber;
+		this.emp_status = emp_status;
+		this.role = role;
+		this.password = password;
+		this.username = username;
 		this.bank = bank;
-		this.emp_status = emp_status;
-	}
-
-	
-	
-
-	public String getEmp_status() {
-		return emp_status;
-	}
-
-	public void setEmp_status(String emp_status) {
-		this.emp_status = emp_status;
+		this.attendanceList = attendanceList;
+		
 	}
 
 	public String getEmpId() {
@@ -116,12 +124,12 @@ public class Employee {
 		this.lastName = lastName;
 	}
 
-	public long getPhone() {
-		return phone;
+	public long getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setPhone(long phone) {
-		this.phone = phone;
+	public void setPhoneNumber(long phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getEmail() {
@@ -148,12 +156,12 @@ public class Employee {
 		this.dob = dob;
 	}
 
-	public String getJobTitle() {
-		return jobTitle;
+	public String getDesignation() {
+		return designation;
 	}
 
-	public void setJobTitle(String jobTitle) {
-		this.jobTitle = jobTitle;
+	public void setDesignation(String designation) {
+		this.designation = designation;
 	}
 
 	public String getDepartment() {
@@ -164,12 +172,12 @@ public class Employee {
 		this.department = department;
 	}
 
-	public LocalDate getHireDate() {
-		return hireDate;
+	public LocalDate getJoiningDate() {
+		return joiningDate;
 	}
 
-	public void setHireDate(LocalDate hireDate) {
-		this.hireDate = hireDate;
+	public void setJoiningDate(LocalDate joiningDate) {
+		this.joiningDate = joiningDate;
 	}
 
 	public String getGender() {
@@ -244,6 +252,38 @@ public class Employee {
 		this.pfNumber = pfNumber;
 	}
 
+	public String getEmp_status() {
+		return emp_status;
+	}
+
+	public void setEmp_status(String emp_status) {
+		this.emp_status = emp_status;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public Bank getBank() {
 		return bank;
 	}
@@ -251,6 +291,14 @@ public class Employee {
 	public void setBank(Bank bank) {
 		this.bank = bank;
 	}
-	
+
+	public List<Attendance> getAttendanceList() {
+		return attendanceList;
+	}
+
+	public void setAttendanceList(List<Attendance> attendanceList) {
+		this.attendanceList = attendanceList;
+	}
+
 
 }

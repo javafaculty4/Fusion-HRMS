@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import com.example.demo.service.ShiftService;
 
 @RestController
 @RequestMapping("/api/vi/attendance")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AttendanceController {
 	
 	@Autowired
@@ -31,6 +34,7 @@ public class AttendanceController {
 	@Autowired
 	private ShiftService shiftService;
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_HR')")
 	@PostMapping("/{empId}/{shiftId}")
 	public Attendance save(@RequestBody Attendance attendance,@PathVariable String empId,@PathVariable int shiftId) {
 		attendance.setEmployee(employeeService.getById(empId));
@@ -38,11 +42,13 @@ public class AttendanceController {
 		return service.save(attendance);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_HR')")
 	@GetMapping("/{id}")
 	public Attendance getById(@PathVariable int id) {
 		return service.getById(id);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_HR')")
 	@GetMapping
 	public List<Attendance> getAll(){
 		return service.getAll();
@@ -53,16 +59,19 @@ public class AttendanceController {
 		return service.getByEmpId(empId);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_HR')")
 	@GetMapping("/getByDate/{date}")
 	public List<Attendance> getByDate(@PathVariable LocalDate date){
 		return service.getByDate(date);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_HR')")
 	@GetMapping("/getByMonth/{month}")
 	public List<Attendance> getByMonth(@PathVariable String month){
 		return service.findByMonth(month.toUpperCase());
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_HR')")
 	@GetMapping("/getByYear/{year}")
 	public List<Attendance> getByYear(@PathVariable int year){
 		return service.findByYear(year);
@@ -88,11 +97,13 @@ public class AttendanceController {
 		return service.presentCountByDate(date);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_HR')")
 	@PutMapping("/update/{id}")
 	public Attendance update(@PathVariable int id, @RequestBody Attendance attendance) {
 		return service.update(id, attendance);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_HR')")
 	@DeleteMapping("/delete/{id}")
 	public String delete(@PathVariable int id) {
 		return service.delete(id);

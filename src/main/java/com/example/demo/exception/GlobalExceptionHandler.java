@@ -10,5 +10,10 @@ public class GlobalExceptionHandler {
 	public String handleResourseNotFoundException(ResourceNotFoundException e) {
 		return e.getMessage();
 	}
+	
+	@ExceptionHandler(DuplicateEmployeeIdException.class)
+	public String handleDuplicateEmployeeIdException(DuplicateEmployeeIdException e) {
+		return e.getMessage();
+	}
 
 }
