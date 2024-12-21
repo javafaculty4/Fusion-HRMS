@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,4 +28,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, String>{
 	public void deleteByName(String firstName,String lastName);
 	
 	public Employee findByUsername(String username);
+	
+	Optional<Employee> findByEmail(String email);
 }

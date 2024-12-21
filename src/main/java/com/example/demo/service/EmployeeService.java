@@ -33,5 +33,11 @@ public interface EmployeeService {
 	public List<Employee> getAll();
 	
 	public long getCount();
+	
+	public void changePassword(String id, String oldPassword, String newPassword) ;
+	
+	public void sendResetToken(String email);
+	
+	public void resetPassword(String token, String newPassword);
 
 }

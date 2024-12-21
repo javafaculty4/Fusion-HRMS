@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.jwt.JwtUtils;
@@ -31,6 +32,9 @@ import com.example.demo.model.Employee;
 import com.example.demo.service.CustomUserDetails;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.service.EmployeeServiceImpl;
+import com.example.demo.utility.ChangePasswordRequest;
+import com.example.demo.utility.ForgotPasswordRequest;
+import com.example.demo.utility.ResetPasswordRequest;
 
 
 @RestController
@@ -49,7 +53,30 @@ public class EmployeeController {
 	@Autowired
 	private JwtUtils jwtUtils;
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        employeeService.sendResetToken(request.getEmail());
+        return ResponseEntity.ok("Password reset link sent to your email.");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request,@RequestParam("token") String token) {
+    	request.setToken(token);
+        employeeService.resetPassword(request.getToken(), request.getNewPassword());
+        return ResponseEntity.ok("Password has been reset successfully.");
+    }
+    
+    @PostMapping("/change-password/{id}")
+    public ResponseEntity<String> changePassword(@PathVariable String id, @RequestBody ChangePasswordRequest request) {
+        try {
+            employeeService.changePassword(id,request.getOldPassword(), request.getNewPassword());
+            return ResponseEntity.ok("Password changed successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+	
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/save/{id}")
 	public Employee save(@RequestBody Employee emp,@PathVariable int id){
 		return employeeService.signUp(emp,id);
@@ -85,6 +112,7 @@ public class EmployeeController {
 		return ResponseEntity.ok(response);
 	}
 	
+		
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/{firstName}")
 	public List<Employee> getByName(@PathVariable String firstName) {

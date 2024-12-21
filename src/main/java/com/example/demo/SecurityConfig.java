@@ -18,6 +18,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.example.demo.jwt.AuthEntryPointJwt;
 import com.example.demo.jwt.AuthTokenFilter;
@@ -47,11 +51,28 @@ public class  SecurityConfig{
 		return builder.getAuthenticationManager();
 	}
 	
+	
+	 @Bean
+	    public CorsFilter corsFilter() {
+	        CorsConfiguration config = new CorsConfiguration();
+	        config.addAllowedOrigin("http://localhost:3000"); // Allowed origin
+	        config.addAllowedMethod("*"); // Allow all HTTP methods
+	        config.addAllowedHeader("*"); // Allow all headers
+	        config.setAllowCredentials(true); // Allow cookies or authorization headers
+
+	        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	        source.registerCorsConfiguration("/**", config);
+	        return new CorsFilter((CorsConfigurationSource) source);
+	    }
+	
+	
 	@Bean
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(request->
 					request.requestMatchers("/api/v1/employee/signin").permitAll()
 					.requestMatchers("/api/v1/employee/save/**").permitAll()
+					.requestMatchers("/api/v1/employee/forgot-password").permitAll()
+					.requestMatchers("/api/v1/employee/reset-password").permitAll()
 					.anyRequest().authenticated());
 		
 		//as we are using JWT, session management must be state less
