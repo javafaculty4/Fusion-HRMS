@@ -20,8 +20,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import com.example.demo.jwt.AuthEntryPointJwt;
 import com.example.demo.jwt.AuthTokenFilter;
@@ -52,18 +52,18 @@ public class  SecurityConfig{
 	}
 	
 	
-	 @Bean
-	    public CorsFilter corsFilter() {
-	        CorsConfiguration config = new CorsConfiguration();
-	        config.addAllowedOrigin("http://localhost:3000"); // Allowed origin
-	        config.addAllowedMethod("*"); // Allow all HTTP methods
-	        config.addAllowedHeader("*"); // Allow all headers
-	        config.setAllowCredentials(true); // Allow cookies or authorization headers
+	@Bean
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("http://localhost:3000"); // Allowed origin
+        config.addAllowedMethod("*"); // Allow all HTTP methods
+        config.addAllowedHeader("*"); // Allow all headers
+        config.setAllowCredentials(true); // Allow cookies or authorization headers
 
-	        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	        source.registerCorsConfiguration("/**", config);
-	        return new CorsFilter((CorsConfigurationSource) source);
-	    }
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
 	
 	
 	@Bean
@@ -85,6 +85,8 @@ public class  SecurityConfig{
 		
 		//this is also for H2 console
 		http.csrf(csrf -> csrf.disable());
+		
+		 http.cors(cors -> cors.disable());
 		
 		http.authenticationProvider(authenticationProvider());
 		
