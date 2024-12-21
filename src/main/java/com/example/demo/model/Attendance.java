@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -23,6 +24,7 @@ public class Attendance {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "emp_id", referencedColumnName = "emp_id")
+	@JsonBackReference
 	private Employee employee;
 
 	@ManyToOne(cascade = CascadeType.ALL)

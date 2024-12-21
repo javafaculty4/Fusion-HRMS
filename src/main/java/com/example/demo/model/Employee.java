@@ -59,6 +59,7 @@ public class Employee {
 	private Bank bank;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+	@JsonManagedReference
 	private List<Attendance> attendanceList;
 	
 	
